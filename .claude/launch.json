@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "papachou",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-p", "8765", "/Users/chiwei_chou/Desktop/Claude Code/papachou"],
+      "port": 8765
+    }
+  ]
+}
