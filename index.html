@@ -206,11 +206,14 @@
     .form-row .form-group { flex: 1; }
 
     /* ── 同訂購人切換 ── */
-    .same-toggle { display: flex; gap: 16px; margin-bottom: 12px; }
+    .same-toggle { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
     .same-toggle label {
       font-size: 0.85rem; font-weight: normal;
       display: flex; align-items: center; gap: 6px; cursor: pointer;
       white-space: nowrap;
+    }
+    .same-toggle label input[type="radio"] {
+      flex: 0 0 auto; width: 16px; height: 16px; margin: 0;
     }
 
     /* ── 地址卡片 ── */
