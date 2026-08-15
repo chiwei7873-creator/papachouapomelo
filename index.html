@@ -141,6 +141,17 @@
       cursor: pointer; transition: background 0.15s, color 0.15s;
     }
     .btn-outline:hover { background: #3D312A; color: #fff; }
+    .sold-out-badge {
+      width: 100%; background: #e8e0d8; color: #9a8878;
+      border: 1.5px solid #d4c8b8; border-radius: 6px;
+      padding: 8px 16px; font-size: 0.85rem; font-weight: bold;
+      text-align: center; margin-top: 14px;
+    }
+    .line-inquiry-link {
+      display: block; margin-top: 8px; font-size: 0.8rem;
+      color: #9a8878; text-align: center; text-decoration: none;
+    }
+    .line-inquiry-link:hover { text-decoration: underline; }
     .btn-secondary {
       display: block; width: 100%;
       background: #fff; color: #3D312A;
@@ -407,7 +418,7 @@
               <tr><td>20斤大箱・約24顆</td><td>$2,400／箱</td></tr>
             </table>
           </div>
-          <button class="btn-primary" onclick="goToPage(2)" style="margin-top:14px;width:100%;padding:8px 16px;font-size:0.85rem;">立即訂購 →</button>
+          <div id="wendan-cta"></div>
         </div>
       </div>
 
@@ -424,6 +435,7 @@
             </table>
           </div>
           <div style="margin-top:14px;width:100%;background:#e8e0d8;color:#9a8878;border:1.5px solid #d4c8b8;border-radius:6px;padding:8px 16px;font-size:0.85rem;font-weight:bold;text-align:center;">已完售</div>
+          <a class="line-inquiry-link" href="#" onclick="handleLineInquiry(event)">如需洽詢，請加入 [周公旦] 官方 LINE 帳號 →</a>
         </div>
       </div>
 
@@ -440,6 +452,7 @@
             </table>
           </div>
           <div style="margin-top:14px;width:100%;background:#e8e0d8;color:#9a8878;border:1.5px solid #d4c8b8;border-radius:6px;padding:8px 16px;font-size:0.85rem;font-weight:bold;text-align:center;">已完售</div>
+          <a class="line-inquiry-link" href="#" onclick="handleLineInquiry(event)">如需洽詢，請加入 [周公旦] 官方 LINE 帳號 →</a>
         </div>
       </div>
 
@@ -628,6 +641,9 @@
 
 <script>
   const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw3SdnulEWpkcBJ-g8-owRp7tv3Cs2UnrhUZ_VSUDnjoKigICSDYq_eKymj_qt-lFOxMw/exec';
+
+  // 切換文旦銷售狀態：'open' = 立即訂購, 'soldout' = 已完售 + LINE 洽詢
+  const WENDAN_STATUS = 'soldout';
 
   const PRODUCTS = {
     wendan: {
@@ -987,6 +1003,28 @@
   addAddress();
   validateForm();
 
+  // ── 文旦 CTA 動態渲染 ──
+  (function renderWendanCta() {
+    const cta = document.getElementById('wendan-cta');
+    if (!cta) return;
+    if (WENDAN_STATUS === 'open') {
+      cta.innerHTML = '<button class="btn-primary" onclick="goToPage(2)" style="margin-top:14px;width:100%;padding:8px 16px;font-size:0.85rem;">立即訂購 →</button>';
+    } else {
+      cta.innerHTML =
+        '<div class="sold-out-badge">已完售</div>' +
+        '<a class="line-inquiry-link" href="#" onclick="handleLineInquiry(event)">如需洽詢，請加入 [周公旦] 官方 LINE 帳號 →</a>';
+    }
+  })();
+
+  function handleLineInquiry(e) {
+    e.preventDefault();
+    if (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
+      window.open('https://lin.ee/oAYQSAn', '_blank');
+    } else {
+      openLineModal();
+    }
+  }
+
   // ── LINE Modal ──
   function openLineModal() {
     const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
@@ -1006,9 +1044,9 @@
 <div id="line-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
   <div style="background:#fff;border-radius:14px;padding:28px 24px;max-width:320px;width:90%;text-align:center;position:relative;box-shadow:0 8px 32px rgba(0,0,0,0.18);">
     <button onclick="closeLineModal()" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:1.3rem;color:#999;cursor:pointer;line-height:1;">✕</button>
-    <div style="font-size:1rem;font-weight:bold;color:#3D312A;margin-bottom:10px;">限量商品洽詢</div>
+    <div style="font-size:1rem;font-weight:bold;color:#3D312A;margin-bottom:10px;">洽詢購買</div>
     <p style="font-size:0.85rem;color:#7a6a5a;margin-bottom:20px;line-height:1.6;">
-      數量有限，如有需要，請直接加入【周公旦】官方 LINE 帳號洽詢。
+      如有需要，請直接加入【周公旦】官方 LINE 帳號洽詢。
     </p>
     <!-- 手機：顯示按鈕 -->
     <a id="line-modal-btn" href="https://lin.ee/oAYQSAn" target="_blank" class="btn-line-inquiry" style="display:none;justify-content:center;width:100%;padding:11px 16px;font-size:0.9rem;">
